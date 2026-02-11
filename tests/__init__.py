@@ -1,3 +1,0 @@
-"""
-CliniRepGen Tests
-"""
