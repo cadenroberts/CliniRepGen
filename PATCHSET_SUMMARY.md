@@ -67,7 +67,30 @@ _(Will be updated after each phase)_
 
 ## VERIFICATION
 
-_(Will be updated after Phase 4)_
+**Command:** `./scripts/demo.sh`
+
+**Output (smoke test, no API key):**
+```
+=== CliniRepGen Demo Script ===
+Demo directory: /var/folders/.../tmp.JaCq8iKj4V
+Python version: 3.13.9
+clinirepgen is installed
+API_KEY not set - running smoke test only (ingest stage)
+
+=== Stage 1: Ingest ===
+Manifest created: demo_output/demo_manifest.json
+  Trial ID: NCT00000001
+  Documents: 1
+  Sections: 4
+Manifest structure is valid
+
+=== Smoke Test Complete ===
+SMOKE_OK
+```
+
+**Result:** Smoke test passes. Ingest stage functional, manifest deterministic.
+
+**Limitation:** Full demo (extract/generate/critique stages) requires OpenAI API key and would cost ~$1-3 per run. Smoke test validates core functionality (manifest building, SHA-256 IDs) without LLM dependency.
 
 ---
 
