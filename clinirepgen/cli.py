@@ -64,7 +64,7 @@ def run(trial, input_dir, output_dir, ctgov, types, iterations, model,
     if verbose:
         logging.getLogger().setLevel(logging.DEBUG)
     
-    click.echo(f"🚀 Starting CliniRepGen pipeline for {trial}")
+    click.echo(f"Starting CliniRepGen pipeline for {trial}")
     click.echo(f"   Input: {input_dir}")
     click.echo(f"   Output: {output_dir}")
     
@@ -110,7 +110,7 @@ def run(trial, input_dir, output_dir, ctgov, types, iterations, model,
         )
         
         click.echo("")
-        click.echo("✅ Pipeline completed!")
+        click.echo("Pipeline completed!")
         click.echo(f"   Iterations: {result.iterations}")
         click.echo(f"   Validation: {'PASSED' if result.passed_validation else 'FAILED'}")
         click.echo(f"   Duration: {result.duration_seconds:.1f}s")
@@ -122,7 +122,7 @@ def run(trial, input_dir, output_dir, ctgov, types, iterations, model,
             click.echo(f"   ... and {len(result.output_files) - 5} more")
             
     except Exception as e:
-        click.echo(f"❌ Pipeline failed: {e}", err=True)
+        click.echo(f"Pipeline failed: {e}", err=True)
         if verbose:
             import traceback
             traceback.print_exc()
@@ -140,7 +140,7 @@ def ingest(trial, input_dir, output_path, ctgov):
     Example:
         clinirepgen ingest --trial NCT12345678 --input ./docs --out manifest.json
     """
-    click.echo(f"📥 Ingesting documents for {trial}")
+    click.echo(f"Ingesting documents for {trial}")
     
     stage = IngestStage(trial_id=trial, output_dir=os.path.dirname(output_path or "."))
     
@@ -161,7 +161,7 @@ def ingest(trial, input_dir, output_path, ctgov):
     with open(output_path, "w") as f:
         f.write(manifest.model_dump_json(indent=2))
     
-    click.echo(f"✅ Manifest created: {output_path}")
+    click.echo(f"Manifest created: {output_path}")
     click.echo(f"   Documents: {len(manifest.documents)}")
     click.echo(f"   Sections: {len(manifest.sections)}")
     click.echo(f"   Tables: {len(manifest.tables)}")
@@ -178,7 +178,7 @@ def extract(manifest, output_path, checklist, model):
     Example:
         clinirepgen extract --manifest manifest.json --out facts.json
     """
-    click.echo(f"🔍 Extracting facts from {manifest}")
+    click.echo(f"Extracting facts from {manifest}")
     
     # Load manifest
     with open(manifest) as f:
@@ -204,7 +204,7 @@ def extract(manifest, output_path, checklist, model):
     # Get coverage
     coverage = stage.get_coverage_summary(facts)
     
-    click.echo(f"✅ Facts extracted: {output_path}")
+    click.echo(f"Facts extracted: {output_path}")
     click.echo(f"   Total facts: {coverage['total_facts']}")
     click.echo(f"   Populated: {coverage['populated']}")
     click.echo(f"   Coverage: {coverage['coverage_pct']:.1f}%")
@@ -222,7 +222,7 @@ def generate(facts, report_type, output_path, critique, model):
     Example:
         clinirepgen generate --facts facts.json --type consort --out report.md
     """
-    click.echo(f"📝 Generating {report_type} report from {facts}")
+    click.echo(f"Generating {report_type} report from {facts}")
     
     # Load facts
     with open(facts) as f:
@@ -252,7 +252,7 @@ def generate(facts, report_type, output_path, critique, model):
     
     saved_path = stage.save_report(report, output_path.replace('.md', ''))
     
-    click.echo(f"✅ Report generated: {saved_path}")
+    click.echo(f"Report generated: {saved_path}")
     click.echo(f"   Word count: {report.total_word_count}")
 
 
@@ -262,7 +262,7 @@ def demo():
     
     Creates sample trial data and runs the full pipeline.
     """
-    click.echo("🎯 Running CliniRepGen demo")
+    click.echo("Running CliniRepGen demo")
     
     demo_dir = Path("demo_output")
     demo_dir.mkdir(exist_ok=True)
@@ -333,7 +333,7 @@ def demo():
     click.echo(f"   Tables: {len(manifest.tables)}")
     
     click.echo("")
-    click.echo("✅ Demo complete!")
+    click.echo("Demo complete!")
     click.echo("")
     click.echo("To run full pipeline with LLM extraction, set API_KEY and run:")
     click.echo(f"  clinirepgen run --trial NCT00000001 --ctgov {sample_path} --out {demo_dir}")
@@ -346,7 +346,7 @@ def info(manifest, facts):
     """Display information about a manifest or facts file."""
     
     if manifest:
-        click.echo(f"📋 Manifest: {manifest}")
+        click.echo(f"Manifest: {manifest}")
         with open(manifest) as f:
             data = json.load(f)
         manifest_obj = TrialManifest(**data)
@@ -362,7 +362,7 @@ def info(manifest, facts):
             click.echo(f"   - {doc.file_name} ({doc.doc_type})")
     
     if facts:
-        click.echo(f"📊 Facts: {facts}")
+        click.echo(f"Facts: {facts}")
         with open(facts) as f:
             data = json.load(f)
         facts_obj = TrialFacts(**data)

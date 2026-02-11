@@ -1,6 +1,6 @@
 # CliniRepGen
 
-Production-grade clinical trial report generation system with deterministic provenance enforcement and iterative validation.
+Clinical trial report generation system with deterministic provenance enforcement and iterative validation.
 
 ## What it does
 

@@ -19,15 +19,15 @@ TESTS := tests
 
 setup: ## Set up development environment
 	$(PIP) install -e ".[dev]"
-	@echo "✅ Development environment set up"
+	@echo "Development environment set up"
 
 install: ## Install the package
 	$(PIP) install -e .
-	@echo "✅ Package installed"
+	@echo "Package installed"
 
 install-dev: ## Install with development dependencies
 	$(PIP) install -e ".[dev]"
-	@echo "✅ Package installed with dev dependencies"
+	@echo "Package installed with dev dependencies"
 
 #
 # Testing
@@ -100,15 +100,15 @@ clean: ## Clean build artifacts
 	rm -rf htmlcov/
 	rm -rf demo_output/
 	find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
-	@echo "✅ Cleaned"
+	@echo "Cleaned"
 
 clean-output: ## Clean output files
 	rm -rf output/
 	rm -rf demo_output/
-	@echo "✅ Output directories cleaned"
+	@echo "Output directories cleaned"
 
 show-structure: ## Show package structure
-	@echo "📦 CliniRepGen Package Structure:"
+	@echo "CliniRepGen Package Structure:"
 	@find $(PACKAGE) -type f -name "*.py" | head -30
 
 #
