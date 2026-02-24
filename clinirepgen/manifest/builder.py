@@ -70,8 +70,9 @@ class ManifestBuilder:
         self.trial_id = trial_id
         self.output_dir = output_dir or "."
         
-        self.manifest_id = f"manifest_{trial_id}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
-        self.created_at = datetime.now().isoformat()
+        # Manifest ID will be computed deterministically in build()
+        self.manifest_id: Optional[str] = None
+        self.created_at: Optional[str] = None
         
         self.documents: Dict[str, DocumentMetadata] = {}
         self.sections: Dict[str, Section] = {}
@@ -431,6 +432,18 @@ class ManifestBuilder:
         Returns:
             Complete TrialManifest object
         """
+        # Compute a deterministic manifest_id based on trial_id and document hashes
+        # Collect available file hashes (skip virtual CT.gov docs)
+        hashes = [d.file_hash for d in self.documents.values() if getattr(d, 'file_hash', None)]
+        if hashes:
+            combined = "".join(sorted(hashes))
+        else:
+            combined = self.trial_id
+
+        manifest_hash = hashlib.sha256(combined.encode('utf-8')).hexdigest()[:12]
+        self.manifest_id = f"manifest_{self.trial_id}_{manifest_hash}"
+        self.created_at = datetime.now().isoformat()
+
         manifest = TrialManifest(
             manifest_id=self.manifest_id,
             trial_id=self.trial_id,

@@ -7,7 +7,7 @@ CliniRepGen correctness is defined by four properties:
 1. **Checklist Coverage**: Percentage of required CONSORT/ICH E3 items populated with high or medium confidence
 2. **Provenance Fidelity**: Every fact value traces to an exact source location (file, section, offset); no hallucinated facts
 3. **Citation Completeness**: Every claim in the generated report is backed by an inline citation to a fact with provenance
-4. **Reproducibility**: Identical inputs produce identical manifests, facts, and reports (modulo LLM nondeterminism)
+4. **Reproducibility**: Identical inputs produce identical manifests, facts, and reports (deterministic when `temperature=0.0`)
 
 ## Metrics
 

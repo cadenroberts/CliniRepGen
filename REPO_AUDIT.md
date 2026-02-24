@@ -98,7 +98,7 @@ High-level: Deterministic SHA-256 IDs assigned to all document entities (documen
 ## 6. Determinism Risks
 
 ### High Risk
-- **LLM calls:** `temperature=0.3` by default (not zero). Model responses nondeterministic.
+- **LLM calls:** `temperature=0.0` by default. Model responses are deterministic when temperature is zero.
 - **No seed control:** No random seed or LLM seed parameter exposed.
 - **Dependency versions:** No lockfile means different library versions across environments.
 
@@ -109,8 +109,7 @@ High-level: Deterministic SHA-256 IDs assigned to all document entities (documen
 ### Low Risk
 - **SHA-256 hashing:** Deterministic IDs for entities (good).
 
-### Mitigations Needed
-- Set `temperature=0.0` for deterministic mode
+- Set `temperature=0.0` for deterministic mode (already default in config)
 - Add LLM seed parameter
 - Add lockfile (requirements.lock or Poetry)
 - Make manifest_id deterministic (hash-based, not timestamp-based)

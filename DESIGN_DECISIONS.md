@@ -347,6 +347,38 @@ def render_section(section: ReportSection) -> str:
 
 ---
 
+## ADR-008: Deterministic Pipeline Defaults
+
+**Date:** 2026-02-24
+**Status:** Accepted
+
+### Context
+
+Reproducible outputs are required for auditability and regression testing. Non-determinism sources include LLM randomness (`temperature`), timestamp-based IDs, and filesystem iteration order.
+
+### Decision
+
+Set conservative, deterministic defaults and compute IDs from content rather than timestamps:
+
+- Default `temperature` = `0.0` (deterministic LLM sampling)
+- Compute `manifest_id` from sorted document file hashes (SHA-256)
+- Sort and deduplicate file lists during ingest to avoid filesystem ordering differences
+
+### Consequences
+
+**Positive:**
+- Identical inputs produce identical manifests and (with the same model version) extracted facts.
+- Easier regression testing and CI comparisons.
+
+**Negative:**
+- May reduce helpful variability for creative tasks (can be adjusted via `CLINIREPGEN_TEMPERATURE`).
+
+### Implementation
+
+See `clinirepgen/config.py` (default temperature), `clinirepgen/manifest/builder.py` (manifest hash), and `clinirepgen/pipeline/ingest.py` (file list sorting and path validation).
+
+---
+
 ## Summary Table
 
 | ADR | Decision | Key Tradeoff | Status |

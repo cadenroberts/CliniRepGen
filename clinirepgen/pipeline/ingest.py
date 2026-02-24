@@ -79,16 +79,22 @@ class IngestStage:
         
         logger.info(f"Found {len(files)} documents to ingest")
         
-        # Ingest each file
+        # Ingest each file, validating it is inside the requested directory
+        dir_resolved = str(dir_path.resolve())
         for file_path in sorted(set(files)):
             try:
-                self.ingest_file(str(file_path))
+                fp = Path(file_path).resolve()
+                # Prevent path traversal / symlink escape: ensure file is inside directory
+                if not str(fp).startswith(dir_resolved):
+                    logger.warning(f"Skipping file outside directory: {file_path}")
+                    continue
+                self.ingest_file(str(fp), base_dir=dir_resolved)
             except Exception as e:
                 logger.error(f"Failed to ingest {file_path}: {e}")
         
         return self.builder.build()
     
-    def ingest_file(self, file_path: str) -> str:
+    def ingest_file(self, file_path: str, base_dir: Optional[str] = None) -> str:
         """
         Ingest a single file.
         
@@ -99,6 +105,13 @@ class IngestStage:
             Document ID
         """
         path = Path(file_path)
+        # If a base_dir is provided, validate that the file is contained within it
+        if base_dir is not None:
+            try:
+                if not str(path.resolve()).startswith(str(Path(base_dir).resolve())):
+                    raise PermissionError(f"File {file_path} is outside of allowed base directory")
+            except Exception:
+                raise PermissionError(f"Invalid or disallowed file path: {file_path}")
         ext = path.suffix.lower()
         
         # Add document to manifest

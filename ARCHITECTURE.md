@@ -326,17 +326,17 @@ Saved in `PipelineResult` and logged at end of run.
 
 ### Nondeterministic Components
 
-1. **LLM calls**: `temperature > 0` introduces randomness
-   - Mitigation: Set `temperature=0.0` for deterministic mode
-   - Residual risk: Model version changes (e.g., gpt-4o → gpt-4o-2024-08-06)
+1. **LLM calls**: randomness can be introduced when `temperature > 0`
+  - Mitigation: Default `temperature` is set to `0.0` in configuration (implemented)
+  - Residual risk: Model version changes (e.g., gpt-4o → gpt-4o-2024-08-06)
 
 2. **File system iteration**: `Path.glob()` order may vary across OS
-   - Mitigation: Sort file lists before processing
-   - Current status: Not implemented (P1 issue)
+  - Mitigation: Sort file lists before processing
+  - Current status: Implemented (ingest sorts and deduplicates file list)
 
 3. **Timestamp in manifest_id**: Embeds `datetime.now()`
-   - Mitigation: Use hash-based ID instead
-   - Current status: Not implemented (P0 issue)
+  - Mitigation: Use hash-based ID instead
+  - Current status: Implemented (manifest_id now computed from document hashes)
 
 ### Reproducibility Requirements
 

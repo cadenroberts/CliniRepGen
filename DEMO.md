@@ -378,3 +378,27 @@ Demo is **failed** if:
 3. **Tune configuration:** Adjust `max_iterations`, `temperature`, model
 4. **Evaluate coverage:** Compare against EVAL.md metrics
 5. **Iterate:** If coverage < 70%, add missing source documents and re-run
+
+## Deterministic Runs (Verification)
+
+CliniRepGen can run deterministically for ingest/extraction when `temperature` is set to `0.0` and the same input files are used. Use this to verify reproducibility across runs.
+
+Example: run ingest twice and compare manifest IDs
+
+```bash
+clinirepgen ingest --trial NCT00000001 --input sample_data/ --out manifest1.json
+clinirepgen ingest --trial NCT00000001 --input sample_data/ --out manifest2.json
+
+# Compare manifest IDs (should be identical when inputs unchanged)
+jq -r '.manifest_id' manifest1.json
+jq -r '.manifest_id' manifest2.json
+
+# Or compare full manifests (ignore created_at if needed)
+jq -S . manifest1.json > /tmp/m1.json
+jq -S . manifest2.json > /tmp/m2.json
+diff /tmp/m1.json /tmp/m2.json || true
+```
+
+Notes:
+- Default `temperature` is `0.0` in configuration; set `CLINIREPGEN_TEMPERATURE` to override.
+- Manifest IDs are now derived from document hashes, not timestamps, so identical inputs produce identical `manifest_id` values.

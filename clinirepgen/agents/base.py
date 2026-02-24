@@ -29,7 +29,7 @@ class AgentConfig:
     api_base: Optional[str] = field(default_factory=lambda: os.getenv("API_BASE", "https://api.openai.com/v1"))
     
     # Generation settings
-    temperature: float = 0.3
+    temperature: float = 0.0
     max_tokens: int = 4096
     
     # Tool settings

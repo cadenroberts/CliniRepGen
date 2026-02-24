@@ -151,10 +151,10 @@ SMOKE_OK
 
 **P0 (Critical for Production) - Not Addressed:**
 1. **Add test suite** - Zero test coverage; old tests deleted (incompatible)
-2. **Add lockfile** - No requirements.lock or Poetry lock
-3. **Set temperature=0.0** - Currently 0.3 (nondeterministic LLM)
-4. **Validate input paths** - Security: no path traversal prevention
-5. **Make manifest_id deterministic** - Currently embeds timestamp
+2. **Add lockfile** - Added `requirements.lock` in this patchset
+3. **Set temperature=0.0** - Default set to `0.0` in configuration
+4. **Validate input paths** - Ingest now validates and restricts input paths
+5. **Make manifest_id deterministic** - Manifest ID now computed from document hashes
 
 **P1 (High Priority) - Not Addressed:**
 6. Trim dependencies (189 packages; many unused)
@@ -170,11 +170,11 @@ SMOKE_OK
 
 ### Why Not Addressed
 
-Per workflow requirements:
-- This is a **documentation overhaul + reproducible verification pass**
+Per workflow requirements and subsequent updates:
+- This started as a **documentation overhaul + reproducible verification pass**
 - Focus: Make repository internally consistent, verifiable, and documented
-- Out of scope: Code changes for determinism, security, or test suite implementation
-- All P0 code issues (lockfile, temperature, tests, path validation) require code changes beyond documentation scope
+- Several P0 code mitigations were implemented after the documentation pass (lockfile, temperature, path validation, manifest_id)
+- Remaining code work: add comprehensive test suite (still outstanding)
 
 Repository is now:
 - ✓ Technically rigorous (11-point audit complete)

@@ -239,7 +239,7 @@ Or create `config.yaml`:
 ```yaml
 llm:
   model: gpt-4o
-  temperature: 0.3
+  temperature: 0.0
   max_tokens: 4096
 
 pipeline:
@@ -255,7 +255,7 @@ output:
 
 - **Document parsing**: Basic heuristics for section splitting; complex tables or nested structures may be misinterpreted
 - **Semantic search**: No vector embeddings; uses keyword matching; may miss relevant sections with different terminology
-- **LLM nondeterminism**: Default `temperature=0.3` introduces variability; set to `0.0` for deterministic extraction
+- **LLM nondeterminism**: Default `temperature=0.0` ensures deterministic extraction; adjust with `CLINIREPGEN_TEMPERATURE` if needed
 - **No ground truth validation**: Critique validates internal consistency (coverage, citations) but not factual correctness against source documents
 - **Single trial scope**: Pipeline designed for one trial at a time; no batch processing or cross-trial analysis
 - **English only**: No multi-language support

@@ -21,7 +21,7 @@ class LLMConfig:
     model: str = field(default_factory=lambda: os.getenv("CLINIREPGEN_MODEL", "gpt-4o"))
     api_key: Optional[str] = field(default_factory=lambda: os.getenv("API_KEY"))
     api_base: str = field(default_factory=lambda: os.getenv("API_BASE", "https://api.openai.com/v1"))
-    temperature: float = 0.3
+    temperature: float = 0.0
     max_tokens: int = 4096
     timeout: float = 300.0
 
