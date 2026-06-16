@@ -8,9 +8,9 @@ Provides the tool interface used by agents to:
 - Access individual table cells
 """
 
+from clinirepgen.tools.access import get_table, get_table_cell, open_section
 from clinirepgen.tools.manifest_tools import ManifestTools
 from clinirepgen.tools.search import search_sections, search_tables
-from clinirepgen.tools.access import open_section, get_table_cell, get_table
 
 __all__ = [
     "ManifestTools",

@@ -10,18 +10,17 @@ Checks for:
 Provides actionable feedback for revision.
 """
 
-import re
-import json
 import logging
-from typing import Optional, List, Dict, Any, Set
+import re
+from dataclasses import dataclass
 from datetime import datetime
-from dataclasses import dataclass, field
+from typing import Dict, List, Optional
 
-from clinirepgen.agents.base import BaseAgent, AgentConfig
+from clinirepgen.agents.base import AgentConfig, BaseAgent
 from clinirepgen.agents.writer import GeneratedReport
-from clinirepgen.schemas.trial_facts import TrialFacts, ChecklistItem
 from clinirepgen.schemas.consort import CONSORT_CHECKLIST
 from clinirepgen.schemas.ich_e3 import ICH_E3_CHECKLIST
+from clinirepgen.schemas.trial_facts import ChecklistItem, TrialFacts
 
 logger = logging.getLogger(__name__)
 
@@ -74,20 +73,20 @@ Be thorough but fair. Not every missing element is critical.
 class CriticAgent(BaseAgent):
     """
     Agent that critiques generated reports.
-    
+
     Validates against checklist requirements and identifies
     issues that need to be addressed.
     """
-    
+
     def __init__(self, config: Optional[AgentConfig] = None):
         """
         Initialize the Critic agent.
-        
+
         Args:
             config: Agent configuration
         """
         super().__init__(config)
-    
+
     def run(
         self,
         report: GeneratedReport,
@@ -96,23 +95,23 @@ class CriticAgent(BaseAgent):
     ) -> CritiqueResult:
         """
         Critique a generated report.
-        
+
         Args:
             report: The generated report to critique
             trial_facts: The TrialFacts used to generate the report
             strict: If True, requires all items to pass
-            
+
         Returns:
             CritiqueResult with identified issues
         """
         issues = []
-        
+
         # Get appropriate checklist
         if report.report_type == "consort":
             checklist = CONSORT_CHECKLIST
         else:
             checklist = ICH_E3_CHECKLIST
-        
+
         # Check for missing checklist items
         missing_items = self._check_missing_items(report, checklist)
         for item_id in missing_items:
@@ -124,7 +123,7 @@ class CriticAgent(BaseAgent):
                 suggestion=f"Search for and include information about: {self._get_item_description(item_id, checklist)}",
                 checklist_item_id=item_id,
             ))
-        
+
         # Check for unused facts
         unused_facts = self._check_unused_facts(report, trial_facts)
         for fact_path in unused_facts:
@@ -135,10 +134,10 @@ class CriticAgent(BaseAgent):
                     severity="minor",
                     location="Overall",
                     description=f"Fact '{fact_path}' with value '{fact.value}' not included",
-                    suggestion=f"Consider including this fact in relevant section",
+                    suggestion="Consider including this fact in relevant section",
                     fact_path=fact_path,
                 ))
-        
+
         # Check for unsupported claims using LLM
         unsupported = self._check_unsupported_claims(report, trial_facts)
         for claim in unsupported:
@@ -149,23 +148,23 @@ class CriticAgent(BaseAgent):
                 description=claim.get("description", "Unsupported claim found"),
                 suggestion=claim.get("suggestion", "Remove or add citation"),
             ))
-        
+
         # Calculate overall score
         score = self._calculate_score(issues, len(checklist))
-        
+
         # Generate suggested queries for missing items
         suggested_queries = self._generate_followup_queries(missing_items, checklist)
-        
+
         # Determine if validation passes
         critical_issues = [i for i in issues if i.severity == "critical"]
         major_issues = [i for i in issues if i.severity == "major"]
-        
+
         passes = True
         if strict:
             passes = len(issues) == 0
         else:
             passes = len(critical_issues) == 0 and len(major_issues) <= 3
-        
+
         return CritiqueResult(
             report_type=report.report_type,
             issues=issues,
@@ -177,7 +176,7 @@ class CriticAgent(BaseAgent):
             suggested_queries=suggested_queries,
             critique_timestamp=datetime.now().isoformat(),
         )
-    
+
     def _check_missing_items(
         self,
         report: GeneratedReport,
@@ -185,12 +184,12 @@ class CriticAgent(BaseAgent):
     ) -> List[str]:
         """Find checklist items not addressed in the report."""
         missing = []
-        
+
         # Get all items addressed by the report
         addressed = set()
         for section in report.sections:
             addressed.update(section.checklist_items_addressed)
-        
+
         # Find required items not addressed
         for item in checklist:
             if item.required:
@@ -199,9 +198,9 @@ class CriticAgent(BaseAgent):
                     # Also check if coverage shows it as covered
                     if not report.checklist_coverage.get(key, False):
                         missing.append(key)
-        
+
         return missing
-    
+
     def _check_unused_facts(
         self,
         report: GeneratedReport,
@@ -213,13 +212,13 @@ class CriticAgent(BaseAgent):
         for path, fact in trial_facts.get_all_fact_values():
             if fact.value is not None:
                 all_facts.add(path)
-        
+
         # Get facts that were used
         used_facts = set(report.facts_used)
-        
+
         # Return unused
         return list(all_facts - used_facts)
-    
+
     def _check_unsupported_claims(
         self,
         report: GeneratedReport,
@@ -227,29 +226,29 @@ class CriticAgent(BaseAgent):
     ) -> List[Dict[str, str]]:
         """Use LLM to identify unsupported claims in the report."""
         unsupported = []
-        
+
         # Build facts reference
         facts_dict = {}
         for path, fact in trial_facts.get_all_fact_values():
             if fact.value is not None:
                 facts_dict[path] = str(fact.value)
-        
+
         for section in report.sections:
             # Skip if section is short
             if section.word_count < 50:
                 continue
-            
+
             # Check for statements without citations
             sentences = re.split(r'[.!?]', section.content)
-            
+
             for sentence in sentences:
                 sentence = sentence.strip()
                 if not sentence or len(sentence) < 20:
                     continue
-                
+
                 # Check if sentence has a citation
                 has_citation = bool(re.search(r'\[[^\]]+\]', sentence))
-                
+
                 # Check if sentence makes a factual claim (contains numbers or specific terms)
                 makes_claim = bool(re.search(
                     r'\d+%?|\d+\.\d+|patients?|subjects?|participants?|significantly|'
@@ -257,7 +256,7 @@ class CriticAgent(BaseAgent):
                     sentence,
                     re.IGNORECASE
                 ))
-                
+
                 if makes_claim and not has_citation:
                     # This is potentially unsupported
                     unsupported.append({
@@ -266,17 +265,17 @@ class CriticAgent(BaseAgent):
                         "description": f"Factual claim without citation: '{sentence[:100]}...'",
                         "suggestion": "Add citation [fact_path] or remove if not supported by facts",
                     })
-        
+
         return unsupported[:10]  # Limit to top 10
-    
+
     def _calculate_score(self, issues: List[CritiqueIssue], total_items: int) -> float:
         """Calculate overall quality score (0-100)."""
         if total_items == 0:
             return 100.0
-        
+
         # Deduct points based on issues
         score = 100.0
-        
+
         for issue in issues:
             if issue.severity == "critical":
                 score -= 10
@@ -284,9 +283,9 @@ class CriticAgent(BaseAgent):
                 score -= 5
             else:
                 score -= 1
-        
+
         return max(0.0, score)
-    
+
     def _generate_followup_queries(
         self,
         missing_items: List[str],
@@ -294,15 +293,15 @@ class CriticAgent(BaseAgent):
     ) -> List[str]:
         """Generate suggested search queries for missing items."""
         queries = []
-        
+
         for item_key in missing_items[:5]:  # Limit to top 5
             # Parse item key
             parts = item_key.split("_", 1)
             if len(parts) != 2:
                 continue
-            
+
             source, item_id = parts
-            
+
             # Find the item
             for item in checklist:
                 if item.item_id == item_id:
@@ -311,23 +310,23 @@ class CriticAgent(BaseAgent):
                     query = " ".join(desc_words)
                     queries.append(query)
                     break
-        
+
         return queries
-    
+
     def _get_item_description(self, item_key: str, checklist: List[ChecklistItem]) -> str:
         """Get description for a checklist item key."""
         parts = item_key.split("_", 1)
         if len(parts) != 2:
             return item_key
-        
+
         source, item_id = parts
-        
+
         for item in checklist:
             if item.item_id == item_id:
                 return item.description
-        
+
         return item_key
-    
+
     def to_markdown(self, critique: CritiqueResult) -> str:
         """Convert critique result to markdown format."""
         lines = [
@@ -341,25 +340,25 @@ class CriticAgent(BaseAgent):
             "---",
             "",
         ]
-        
+
         # Issues summary
         lines.append("## Issues Summary")
         lines.append("")
-        
+
         critical = [i for i in critique.issues if i.severity == "critical"]
         major = [i for i in critique.issues if i.severity == "major"]
         minor = [i for i in critique.issues if i.severity == "minor"]
-        
+
         lines.append(f"- 🔴 Critical: {len(critical)}")
         lines.append(f"- 🟠 Major: {len(major)}")
         lines.append(f"- 🟡 Minor: {len(minor)}")
         lines.append("")
-        
+
         # Detailed issues
         if critique.issues:
             lines.append("## Detailed Issues")
             lines.append("")
-            
+
             for i, issue in enumerate(critique.issues, 1):
                 emoji = {"critical": "🔴", "major": "🟠", "minor": "🟡"}.get(issue.severity, "⚪")
                 lines.append(f"### {i}. {emoji} {issue.issue_type.replace('_', ' ').title()}")
@@ -367,7 +366,7 @@ class CriticAgent(BaseAgent):
                 lines.append(f"**Description:** {issue.description}")
                 lines.append(f"**Suggestion:** {issue.suggestion}")
                 lines.append("")
-        
+
         # Suggested queries
         if critique.suggested_queries:
             lines.append("## Suggested Follow-up Queries")
@@ -375,5 +374,5 @@ class CriticAgent(BaseAgent):
             for query in critique.suggested_queries:
                 lines.append(f"- `{query}`")
             lines.append("")
-        
+
         return "\n".join(lines)

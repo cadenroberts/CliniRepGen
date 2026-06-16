@@ -1,0 +1,246 @@
+{
+  "manifest_id": "manifest_NCT00000001_f2b6a48504e4",
+  "trial_id": "NCT00000001",
+  "created_at": "2026-05-24T16:31:30.131332",
+  "documents": {
+    "doc_ctgov_NCT00000001": {
+      "doc_id": "doc_ctgov_NCT00000001",
+      "file_name": "NCT00000001_ctgov.json",
+      "file_path": "",
+      "doc_type": "ctgov_record",
+      "title": null,
+      "num_pages": null,
+      "file_size_bytes": null,
+      "file_hash": null,
+      "processed_at": "2026-05-24T16:31:30.131068",
+      "parser_version": null,
+      "num_sections": 0,
+      "num_tables": 0,
+      "total_chars": 0
+    }
+  },
+  "sections": {
+    "sec_d1e7eb850ec0": {
+      "section_id": "sec_d1e7eb850ec0",
+      "doc_id": "doc_ctgov_NCT00000001",
+      "title": "Study Metadata",
+      "level": 1,
+      "section_number": null,
+      "content": "{\n  \"nct_id\": \"NCT00000001\",\n  \"brief_title\": \"Demo Randomized Controlled Trial of Treatment A vs Placebo\",\n  \"official_title\": \"A Phase 3, Randomized, Double-Blind, Placebo-Controlled Study of Treatment A in Patients with Condition X\",\n  \"phase\": \"Phase 3\",\n  \"study_type\": \"Interventional\",\n  \"enrollment\": 200,\n  \"start_date\": \"2023-01-15\",\n  \"completion_date\": \"2024-06-30\",\n  \"overall_status\": \"Completed\"\n}",
+      "page_start": null,
+      "page_end": null,
+      "char_start": null,
+      "char_end": null,
+      "parent_section_id": null,
+      "child_section_ids": [],
+      "word_count": 0,
+      "has_tables": false,
+      "table_ids": [],
+      "tags": []
+    },
+    "sec_00a67a51b02e": {
+      "section_id": "sec_00a67a51b02e",
+      "doc_id": "doc_ctgov_NCT00000001",
+      "title": "Interventions",
+      "level": 1,
+      "section_number": null,
+      "content": "- Treatment A (Drug): 10mg oral tablet once daily for 12 weeks\n- Placebo (Drug): Matching placebo tablet once daily for 12 weeks",
+      "page_start": null,
+      "page_end": null,
+      "char_start": null,
+      "char_end": null,
+      "parent_section_id": null,
+      "child_section_ids": [],
+      "word_count": 0,
+      "has_tables": false,
+      "table_ids": [],
+      "tags": [
+        "interventions"
+      ]
+    },
+    "sec_4977a9e5d075": {
+      "section_id": "sec_4977a9e5d075",
+      "doc_id": "doc_ctgov_NCT00000001",
+      "title": "Outcomes",
+      "level": 1,
+      "section_number": null,
+      "content": "- [Primary] Change in Disease Score from Baseline: Mean change in validated disease score (timeframe: Week 12)",
+      "page_start": null,
+      "page_end": null,
+      "char_start": null,
+      "char_end": null,
+      "parent_section_id": null,
+      "child_section_ids": [],
+      "word_count": 0,
+      "has_tables": false,
+      "table_ids": [],
+      "tags": [
+        "outcomes",
+        "endpoints"
+      ]
+    },
+    "sec_907051526873": {
+      "section_id": "sec_907051526873",
+      "doc_id": "doc_ctgov_NCT00000001",
+      "title": "Adverse Events",
+      "level": 1,
+      "section_number": null,
+      "content": "See Table tbl_9ac4fc5116cc for adverse event summary.",
+      "page_start": null,
+      "page_end": null,
+      "char_start": null,
+      "char_end": null,
+      "parent_section_id": null,
+      "child_section_ids": [],
+      "word_count": 0,
+      "has_tables": true,
+      "table_ids": [
+        "tbl_9ac4fc5116cc"
+      ],
+      "tags": [
+        "safety",
+        "adverse_events"
+      ]
+    }
+  },
+  "tables": {
+    "tbl_9ac4fc5116cc": {
+      "table_id": "tbl_9ac4fc5116cc",
+      "doc_id": "doc_ctgov_NCT00000001",
+      "section_id": "sec_907051526873",
+      "caption": "Adverse Events",
+      "table_number": null,
+      "num_rows": 2,
+      "num_cols": 5,
+      "headers": [
+        "Event Type",
+        "Organ System",
+        "Term",
+        "Subjects Affected",
+        "Subjects at Risk"
+      ],
+      "cells": [
+        {
+          "row": 0,
+          "col": 0,
+          "value": "Event Type",
+          "is_header": true,
+          "row_span": 1,
+          "col_span": 1
+        },
+        {
+          "row": 0,
+          "col": 1,
+          "value": "Organ System",
+          "is_header": true,
+          "row_span": 1,
+          "col_span": 1
+        },
+        {
+          "row": 0,
+          "col": 2,
+          "value": "Term",
+          "is_header": true,
+          "row_span": 1,
+          "col_span": 1
+        },
+        {
+          "row": 0,
+          "col": 3,
+          "value": "Subjects Affected",
+          "is_header": true,
+          "row_span": 1,
+          "col_span": 1
+        },
+        {
+          "row": 0,
+          "col": 4,
+          "value": "Subjects at Risk",
+          "is_header": true,
+          "row_span": 1,
+          "col_span": 1
+        },
+        {
+          "row": 1,
+          "col": 0,
+          "value": "Other",
+          "is_header": false,
+          "row_span": 1,
+          "col_span": 1
+        },
+        {
+          "row": 1,
+          "col": 1,
+          "value": "Gastrointestinal disorders",
+          "is_header": false,
+          "row_span": 1,
+          "col_span": 1
+        },
+        {
+          "row": 1,
+          "col": 2,
+          "value": "Nausea",
+          "is_header": false,
+          "row_span": 1,
+          "col_span": 1
+        },
+        {
+          "row": 1,
+          "col": 3,
+          "value": "15",
+          "is_header": false,
+          "row_span": 1,
+          "col_span": 1
+        },
+        {
+          "row": 1,
+          "col": 4,
+          "value": "100",
+          "is_header": false,
+          "row_span": 1,
+          "col_span": 1
+        }
+      ],
+      "markdown": null,
+      "raw_data": [
+        [
+          "Event Type",
+          "Organ System",
+          "Term",
+          "Subjects Affected",
+          "Subjects at Risk"
+        ],
+        [
+          "Other",
+          "Gastrointestinal disorders",
+          "Nausea",
+          "15",
+          "100"
+        ]
+      ],
+      "page_num": null,
+      "tags": [
+        "safety",
+        "adverse_events"
+      ]
+    }
+  },
+  "doc_to_sections": {
+    "doc_ctgov_NCT00000001": [
+      "sec_d1e7eb850ec0",
+      "sec_00a67a51b02e",
+      "sec_4977a9e5d075",
+      "sec_907051526873"
+    ]
+  },
+  "doc_to_tables": {
+    "doc_ctgov_NCT00000001": [
+      "tbl_9ac4fc5116cc"
+    ]
+  },
+  "section_to_tables": {
+    "sec_907051526873": [
+      "tbl_9ac4fc5116cc"
+    ]
+  }
+}

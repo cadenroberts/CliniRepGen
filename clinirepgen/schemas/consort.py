@@ -7,8 +7,9 @@ Each item is mapped to the Trial Facts schema and used to:
 3. Generate the CONSORT narrative structure
 """
 
-from typing import List, Dict
-from clinirepgen.schemas.trial_facts import ChecklistItem, ChecklistCategory
+from typing import Dict, List
+
+from clinirepgen.schemas.trial_facts import ChecklistCategory, ChecklistItem
 
 # CONSORT 2025 Checklist Items
 CONSORT_CHECKLIST: List[ChecklistItem] = [
@@ -27,7 +28,7 @@ CONSORT_CHECKLIST: List[ChecklistItem] = [
         source="CONSORT",
         required=True
     ),
-    
+
     # Open Science
     ChecklistItem(
         item_id="2",
@@ -64,7 +65,7 @@ CONSORT_CHECKLIST: List[ChecklistItem] = [
         source="CONSORT",
         required=True
     ),
-    
+
     # Introduction
     ChecklistItem(
         item_id="6",
@@ -80,7 +81,7 @@ CONSORT_CHECKLIST: List[ChecklistItem] = [
         source="CONSORT",
         required=True
     ),
-    
+
     # Methods
     ChecklistItem(
         item_id="8",
@@ -229,7 +230,7 @@ CONSORT_CHECKLIST: List[ChecklistItem] = [
         source="CONSORT",
         required=False
     ),
-    
+
     # Results
     ChecklistItem(
         item_id="22a",
@@ -301,7 +302,7 @@ CONSORT_CHECKLIST: List[ChecklistItem] = [
         source="CONSORT",
         required=False
     ),
-    
+
     # Discussion
     ChecklistItem(
         item_id="29",
@@ -330,7 +331,7 @@ CONSORT_TO_FACTS_MAP: Dict[str, List[str]] = {
     "9": ["design.design_type", "design.allocation_ratio", "design.framework"],
     "11": [],  # Settings - varies
     "12a": ["population.inclusion_criteria", "population.exclusion_criteria"],
-    "13": ["intervention.intervention_name", "intervention.intervention_dose", 
+    "13": ["intervention.intervention_name", "intervention.intervention_dose",
            "intervention.comparator_name"],
     "14": ["outcomes.primary_outcome", "outcomes.primary_outcome_measure",
            "outcomes.primary_outcome_timeframe", "outcomes.secondary_outcomes"],
@@ -346,7 +347,7 @@ CONSORT_TO_FACTS_MAP: Dict[str, List[str]] = {
     "22a": ["results.participants_randomized", "results.participants_analyzed"],
     "23a": ["dates.first_enrollment_date", "dates.last_enrollment_date"],
     "25": ["population.actual_enrollment", "population.age_range", "population.sex_distribution"],
-    "26": ["results.primary_result", "results.effect_size", 
+    "26": ["results.primary_result", "results.effect_size",
            "results.confidence_interval", "results.p_value"],
     "27": ["safety.adverse_events_summary", "safety.serious_adverse_events"],
 }

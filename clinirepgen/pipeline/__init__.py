@@ -9,10 +9,10 @@ Main pipeline stages:
 5. Iterate: Re-extract and rewrite until validation passes
 """
 
-from clinirepgen.pipeline.orchestrator import Pipeline, PipelineConfig
-from clinirepgen.pipeline.ingest import IngestStage
 from clinirepgen.pipeline.extract import ExtractStage
 from clinirepgen.pipeline.generate import GenerateStage
+from clinirepgen.pipeline.ingest import IngestStage
+from clinirepgen.pipeline.orchestrator import Pipeline, PipelineConfig
 
 __all__ = [
     "Pipeline",

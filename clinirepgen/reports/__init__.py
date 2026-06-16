@@ -7,15 +7,15 @@ Provides:
 - Markdown and HTML renderers
 """
 
-from clinirepgen.reports.templates import (
-    CONSORTTemplate,
-    ICHE3Template,
-    BaseTemplate,
-)
 from clinirepgen.reports.renderer import (
     MarkdownRenderer,
     render_consort,
     render_ich_e3,
+)
+from clinirepgen.reports.templates import (
+    BaseTemplate,
+    CONSORTTemplate,
+    ICHE3Template,
 )
 
 __all__ = [

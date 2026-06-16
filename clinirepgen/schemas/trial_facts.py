@@ -8,10 +8,11 @@ Aligned to CONSORT 2025 + ICH E3 checklist items. Each fact stores:
 - notes: any conflicts or issues
 """
 
-from typing import Optional, List, Dict, Any, Union
-from pydantic import BaseModel, Field
 from enum import Enum
-from datetime import date
+from typing import Any, Dict, List, Optional
+
+from pydantic import BaseModel, Field
+
 from clinirepgen.schemas.provenance import Provenance, ProvenanceList
 
 
@@ -26,11 +27,11 @@ class ConfidenceLevel(str, Enum):
 class FactValue(BaseModel):
     """
     A single fact value with provenance and confidence tracking.
-    
+
     This is the core unit of the Trial Facts schema - every piece of
     information must be wrapped in a FactValue with provenance.
     """
-    
+
     value: Optional[Any] = Field(
         default=None,
         description="The extracted value (None if not found)"
@@ -51,17 +52,17 @@ class FactValue(BaseModel):
         default=None,
         description="ID of the checklist item this fact addresses"
     )
-    
+
     @property
     def is_null(self) -> bool:
         """Check if value is null/missing."""
         return self.value is None
-    
+
     @property
     def is_low_confidence(self) -> bool:
         """Check if confidence is low or unverified."""
         return self.confidence in [ConfidenceLevel.LOW, ConfidenceLevel.UNVERIFIED]
-    
+
     def add_provenance(self, provenance: Provenance) -> None:
         """Add a provenance record to this fact."""
         self.provenance.add(provenance)
@@ -88,9 +89,9 @@ class ChecklistCategory(str, Enum):
 
 class ChecklistItem(BaseModel):
     """A single checklist item from CONSORT or ICH E3."""
-    
+
     model_config = {"use_enum_values": True}
-    
+
     item_id: str = Field(
         ...,
         description="Unique identifier (e.g., '1a', '12.3.2')"
@@ -221,11 +222,11 @@ class TrialEthics(BaseModel):
 class TrialFacts(BaseModel):
     """
     Complete Trial Facts schema with provenance tracking.
-    
+
     This is the central truth store for all extracted trial information.
     Every field is a FactValue with provenance tracking.
     """
-    
+
     # Metadata
     trial_id: str = Field(
         ...,
@@ -243,7 +244,7 @@ class TrialFacts(BaseModel):
         default="1.0",
         description="Version of extraction pipeline"
     )
-    
+
     # Fact categories
     identification: TrialIdentification = Field(default_factory=TrialIdentification)
     design: TrialDesign = Field(default_factory=TrialDesign)
@@ -255,44 +256,44 @@ class TrialFacts(BaseModel):
     dates: TrialDates = Field(default_factory=TrialDates)
     statistics: TrialStatistics = Field(default_factory=TrialStatistics)
     ethics: TrialEthics = Field(default_factory=TrialEthics)
-    
+
     # Additional facts as key-value pairs for flexibility
     additional_facts: Dict[str, FactValue] = Field(
         default_factory=dict,
         description="Additional facts not covered by structured fields"
     )
-    
+
     # Checklist coverage tracking
     checklist_coverage: Dict[str, bool] = Field(
         default_factory=dict,
         description="Mapping of checklist item IDs to coverage status"
     )
-    
+
     def get_all_fact_values(self) -> List[tuple[str, FactValue]]:
         """Get all FactValue fields with their paths."""
         results = []
-        
-        for category_name in ['identification', 'design', 'population', 
+
+        for category_name in ['identification', 'design', 'population',
                               'intervention', 'outcomes', 'results',
                               'safety', 'dates', 'statistics', 'ethics']:
             category = getattr(self, category_name)
             for field_name, field_value in category:
                 if isinstance(field_value, FactValue):
                     results.append((f"{category_name}.{field_name}", field_value))
-        
+
         for key, value in self.additional_facts.items():
             results.append((f"additional.{key}", value))
-            
+
         return results
-    
+
     def get_null_facts(self) -> List[str]:
         """Get list of fact paths that are null/missing."""
         return [path for path, fv in self.get_all_fact_values() if fv.is_null]
-    
+
     def get_low_confidence_facts(self) -> List[str]:
         """Get list of fact paths with low confidence."""
         return [path for path, fv in self.get_all_fact_values() if fv.is_low_confidence]
-    
+
     def get_fact_by_path(self, path: str) -> Optional[FactValue]:
         """Get a fact value by its dot-notation path."""
         parts = path.split(".")
@@ -304,8 +305,8 @@ class TrialFacts(BaseModel):
             if category:
                 return getattr(category, field_name, None)
         return None
-    
-    def set_fact(self, path: str, value: Any, provenance: Provenance, 
+
+    def set_fact(self, path: str, value: Any, provenance: Provenance,
                  confidence: ConfidenceLevel = ConfidenceLevel.MEDIUM) -> None:
         """Set a fact value with provenance."""
         fact_value = self.get_fact_by_path(path)

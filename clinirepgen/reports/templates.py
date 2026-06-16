@@ -5,11 +5,9 @@ Templates define the section structure and content requirements
 for each report type.
 """
 
-from typing import List, Dict, Any, Optional
-from dataclasses import dataclass, field
 from abc import ABC, abstractmethod
-
-from clinirepgen.schemas.trial_facts import TrialFacts, ChecklistCategory
+from dataclasses import dataclass, field
+from typing import List, Optional
 
 
 @dataclass
@@ -27,17 +25,17 @@ class TemplateSection:
 
 class BaseTemplate(ABC):
     """Base class for report templates."""
-    
+
     @abstractmethod
     def get_sections(self) -> List[TemplateSection]:
         """Get all sections in the template."""
         pass
-    
+
     @abstractmethod
     def get_section(self, section_id: str) -> Optional[TemplateSection]:
         """Get a specific section by ID."""
         pass
-    
+
     def get_required_facts(self) -> List[str]:
         """Get list of all required fact paths."""
         facts = []
@@ -46,7 +44,7 @@ class BaseTemplate(ABC):
             for sub in section.subsections:
                 facts.extend(sub.fact_paths)
         return list(set(facts))
-    
+
     def get_checklist_items(self) -> List[str]:
         """Get list of all checklist items covered."""
         items = []
@@ -59,11 +57,11 @@ class BaseTemplate(ABC):
 
 class CONSORTTemplate(BaseTemplate):
     """Template for CONSORT 2025 journal manuscript format."""
-    
+
     def __init__(self):
         self._sections = self._build_sections()
         self._section_map = {s.id: s for s in self._sections}
-    
+
     def _build_sections(self) -> List[TemplateSection]:
         return [
             TemplateSection(
@@ -115,7 +113,7 @@ class CONSORTTemplate(BaseTemplate):
                 title="Methods",
                 level=1,
                 description="Trial design, participants, interventions, outcomes, and analysis",
-                checklist_items=["8", "9", "10", "11", "12a", "12b", "13", "14", "15", 
+                checklist_items=["8", "9", "10", "11", "12a", "12b", "13", "14", "15",
                                 "16a", "16b", "17a", "17b", "18", "19", "20a", "20b",
                                 "21a", "21b", "21c", "21d"],
                 subsections=[
@@ -245,21 +243,21 @@ class CONSORTTemplate(BaseTemplate):
                 ],
             ),
         ]
-    
+
     def get_sections(self) -> List[TemplateSection]:
         return self._sections
-    
+
     def get_section(self, section_id: str) -> Optional[TemplateSection]:
         return self._section_map.get(section_id)
 
 
 class ICHE3Template(BaseTemplate):
     """Template for ICH E3 Clinical Study Report format."""
-    
+
     def __init__(self):
         self._sections = self._build_sections()
         self._section_map = {s.id: s for s in self._sections}
-    
+
     def _build_sections(self) -> List[TemplateSection]:
         return [
             TemplateSection(
@@ -306,7 +304,7 @@ class ICHE3Template(BaseTemplate):
                 title="9. Investigational Plan",
                 level=1,
                 description="Study design, population, treatments, and analysis plan",
-                checklist_items=["9.1", "9.2", "9.3.1", "9.3.2", "9.3.3", 
+                checklist_items=["9.1", "9.2", "9.3.1", "9.3.2", "9.3.3",
                                 "9.4.1", "9.4.2", "9.4.3", "9.4.4", "9.4.5", "9.4.6",
                                 "9.5.1", "9.5.2", "9.5.3", "9.6", "9.7.1", "9.7.2", "9.8"],
                 subsections=[
@@ -379,9 +377,9 @@ class ICHE3Template(BaseTemplate):
                 checklist_items=["13.1"],
             ),
         ]
-    
+
     def get_sections(self) -> List[TemplateSection]:
         return self._sections
-    
+
     def get_section(self, section_id: str) -> Optional[TemplateSection]:
         return self._section_map.get(section_id)

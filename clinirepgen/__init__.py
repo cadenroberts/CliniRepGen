@@ -8,13 +8,13 @@ clinical trial reports from structured and unstructured trial artifacts.
 __version__ = "0.1.0"
 __author__ = "CliniRepGen Team"
 
-from clinirepgen.schemas.trial_facts import TrialFacts
-from clinirepgen.schemas.provenance import Provenance
 from clinirepgen.manifest.models import TrialManifest
+from clinirepgen.schemas.provenance import Provenance
+from clinirepgen.schemas.trial_facts import TrialFacts
 
 __all__ = [
     "TrialFacts",
-    "Provenance", 
+    "Provenance",
     "TrialManifest",
     "__version__",
 ]

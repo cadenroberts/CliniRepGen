@@ -7,10 +7,10 @@ Three main agents:
 - Critic: Validates reports and identifies gaps/issues
 """
 
-from clinirepgen.agents.base import BaseAgent, AgentConfig
+from clinirepgen.agents.base import AgentConfig, BaseAgent
+from clinirepgen.agents.critic import CriticAgent
 from clinirepgen.agents.fact_finder import FactFinderAgent
 from clinirepgen.agents.writer import WriterAgent
-from clinirepgen.agents.critic import CriticAgent
 
 __all__ = [
     "BaseAgent",

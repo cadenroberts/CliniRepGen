@@ -1,0 +1,42 @@
+{
+  "study": {
+    "nct_id": "NCT00000001",
+    "brief_title": "Demo Randomized Controlled Trial of Treatment A vs Placebo",
+    "official_title": "A Phase 3, Randomized, Double-Blind, Placebo-Controlled Study of Treatment A in Patients with Condition X",
+    "phase": "Phase 3",
+    "study_type": "Interventional",
+    "enrollment": 200,
+    "start_date": "2023-01-15",
+    "completion_date": "2024-06-30",
+    "overall_status": "Completed"
+  },
+  "interventions": [
+    {
+      "intervention_type": "Drug",
+      "name": "Treatment A",
+      "description": "10mg oral tablet once daily for 12 weeks"
+    },
+    {
+      "intervention_type": "Drug",
+      "name": "Placebo",
+      "description": "Matching placebo tablet once daily for 12 weeks"
+    }
+  ],
+  "outcomes": [
+    {
+      "outcome_type": "Primary",
+      "title": "Change in Disease Score from Baseline",
+      "time_frame": "Week 12",
+      "description": "Mean change in validated disease score"
+    }
+  ],
+  "adverse_events": [
+    {
+      "event_type": "Other",
+      "organ_system": "Gastrointestinal disorders",
+      "adverse_event_term": "Nausea",
+      "subjects_affected": 15,
+      "subjects_at_risk": 100
+    }
+  ]
+}

@@ -5,8 +5,9 @@ ICH E3 provides the structure for Clinical Study Reports (CSRs).
 Each item maps to sections required in regulatory submissions.
 """
 
-from typing import List, Dict
-from clinirepgen.schemas.trial_facts import ChecklistItem, ChecklistCategory
+from typing import Dict, List
+
+from clinirepgen.schemas.trial_facts import ChecklistCategory, ChecklistItem
 
 # ICH E3 Checklist Items (CSR Structure)
 ICH_E3_CHECKLIST: List[ChecklistItem] = [
@@ -18,7 +19,7 @@ ICH_E3_CHECKLIST: List[ChecklistItem] = [
         source="ICH_E3",
         required=True
     ),
-    
+
     # Synopsis
     ChecklistItem(
         item_id="2.1",
@@ -27,7 +28,7 @@ ICH_E3_CHECKLIST: List[ChecklistItem] = [
         source="ICH_E3",
         required=True
     ),
-    
+
     # Ethics
     ChecklistItem(
         item_id="5.1",
@@ -50,7 +51,7 @@ ICH_E3_CHECKLIST: List[ChecklistItem] = [
         source="ICH_E3",
         required=True
     ),
-    
+
     # Investigators
     ChecklistItem(
         item_id="6.1",
@@ -59,7 +60,7 @@ ICH_E3_CHECKLIST: List[ChecklistItem] = [
         source="ICH_E3",
         required=True
     ),
-    
+
     # Introduction
     ChecklistItem(
         item_id="7.1",
@@ -68,7 +69,7 @@ ICH_E3_CHECKLIST: List[ChecklistItem] = [
         source="ICH_E3",
         required=True
     ),
-    
+
     # Objectives
     ChecklistItem(
         item_id="8.1",
@@ -77,7 +78,7 @@ ICH_E3_CHECKLIST: List[ChecklistItem] = [
         source="ICH_E3",
         required=True
     ),
-    
+
     # Investigational Plan
     ChecklistItem(
         item_id="9.1",
@@ -226,7 +227,7 @@ ICH_E3_CHECKLIST: List[ChecklistItem] = [
         source="ICH_E3",
         required=True
     ),
-    
+
     # Study Patients
     ChecklistItem(
         item_id="10.1",
@@ -242,7 +243,7 @@ ICH_E3_CHECKLIST: List[ChecklistItem] = [
         source="ICH_E3",
         required=True
     ),
-    
+
     # Efficacy Evaluation
     ChecklistItem(
         item_id="11.1",
@@ -279,7 +280,7 @@ ICH_E3_CHECKLIST: List[ChecklistItem] = [
         source="ICH_E3",
         required=True
     ),
-    
+
     # Safety Evaluation
     ChecklistItem(
         item_id="12.1",
@@ -337,7 +338,7 @@ ICH_E3_CHECKLIST: List[ChecklistItem] = [
         source="ICH_E3",
         required=True
     ),
-    
+
     # Discussion and Conclusions
     ChecklistItem(
         item_id="13.1",
